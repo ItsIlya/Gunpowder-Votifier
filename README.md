@@ -1,2 +1,2 @@
-# GunpowderTemplate
-Template for creating Gunpowder modules
+# Gunpowder-Votifier
+Votifier Module For Gunpowder

@@ -1,19 +1,17 @@
 {
   "schemaVersion": 1,
-  "id": "gunpowder-template",
+  "id": "votifier",
   "version": "${version}",
-  "name": "Gunpowder Template",
-  "description": "Gunpowder Template Module",
+  "name": "Gunpowder Votifier",
+  "description": "Gunpowder Votifier Module",
   "license": "MIT",
-  "icon": "assets/gunpowder/icon.png",
-  "environment": "*",
+  "environment": "server",
   "entrypoints": {
     "gunpowder:modules": [
       "io.github.gunpowder.GunpowderTemplateModule"
     ]
   },
   "mixins": [
-    "mixins.template.gunpowder.json"
   ],
   "depends": {
     "gunpowder-base": ">=${gunpowder}",
