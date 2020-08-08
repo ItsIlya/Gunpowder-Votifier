@@ -1,4 +1,4 @@
-package io.github.gunpowder.votifier.api
+package io.github.gunpowder.votifier.dataholders
 
 data class Vote(
         /**

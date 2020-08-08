@@ -1,5 +1,6 @@
 package io.github.gunpowder.votifier.crypto
 
+import io.github.gunpowder.votifier.GunpowderVotifierModule
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -25,7 +26,7 @@ class RSAIO {
         }
 
         fun load(directory: File): KeyPair {
-            val keyFactory: KeyFactory = KeyFactory.getInstance("RSA")
+            val keyFactory: KeyFactory = KeyFactory.getInstance(GunpowderVotifierModule.instance.protocol)
             val encodedPublicKey = fileToByteArray(File("${directory}/public.key"))
             val encodedPrivateKey = fileToByteArray(File("${directory}/private.key"))
 

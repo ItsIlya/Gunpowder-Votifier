@@ -1,5 +1,6 @@
 package io.github.gunpowder.votifier.crypto
 
+import io.github.gunpowder.votifier.GunpowderVotifierModule
 import java.security.Key
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -16,7 +17,7 @@ class RSA {
         }
 
         private fun doFinal(data: ByteArray, key: Key, mode: Int): ByteArray {
-            val cipher: Cipher = Cipher.getInstance("RSA")
+            val cipher: Cipher = Cipher.getInstance(GunpowderVotifierModule.instance.protocol)
             cipher.init(mode, key)
             return cipher.doFinal(data)
         }

@@ -26,27 +26,44 @@ package io.github.gunpowder.votifier
 
 import io.github.gunpowder.api.GunpowderMod
 import io.github.gunpowder.api.GunpowderModule
+import io.github.gunpowder.votifier.entities.Votifier
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+import java.io.File
+import java.lang.Exception
 
 class GunpowderVotifierModule : GunpowderModule {
     override val name = "votifier"
     override val toggleable = true
 
     companion object {
-        private lateinit var votifier: Votifier
+        val logger: Logger = LogManager.getLogger("Votifier")
+        val directory: File = File(System.getProperty("user.dir")).toPath().resolve("config").resolve("votifier").toFile()
+        private var votifier: Votifier? = null
 
         val gunpowder: GunpowderMod
             get() = GunpowderMod.instance
 
+        @JvmStatic
         val instance: Votifier
-            get() = votifier
+            get() = votifier ?: throw IllegalStateException("Votifier instance hasn't been initialized!")
     }
 
     override fun onInitialize() {
-        votifier = Votifier()
+        if (!directory.exists()) {
+            directory.mkdirs()
+        }
+
+        votifier = try {
+            Votifier
+        } catch (e: Exception) {
+            logger.error("Votifier did not initialize properly!", e)
+            null
+        }
 
         ServerLifecycleEvents.SERVER_STOPPING.register(ServerLifecycleEvents.ServerStopping {
-            votifier.shutdown()
+            votifier!!.shutdown()
         })
     }
 
