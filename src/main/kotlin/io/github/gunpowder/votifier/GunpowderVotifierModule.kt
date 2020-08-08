@@ -26,6 +26,8 @@ package io.github.gunpowder.votifier
 
 import io.github.gunpowder.api.GunpowderMod
 import io.github.gunpowder.api.GunpowderModule
+import io.github.gunpowder.votifier.commands.VotifierCommand
+import io.github.gunpowder.votifier.configs.VotifierConfig
 import io.github.gunpowder.votifier.entities.Votifier
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import org.apache.logging.log4j.LogManager
@@ -41,6 +43,7 @@ class GunpowderVotifierModule : GunpowderModule {
         val logger: Logger = LogManager.getLogger("Votifier")
         val directory: File = File(System.getProperty("user.dir")).toPath().resolve("config").resolve("votifier").toFile()
         private var votifier: Votifier? = null
+        val config: VotifierConfig = gunpowder.registry.getConfig(VotifierConfig::class.java)
 
         val gunpowder: GunpowderMod
             get() = GunpowderMod.instance
@@ -48,6 +51,14 @@ class GunpowderVotifierModule : GunpowderModule {
         @JvmStatic
         val instance: Votifier
             get() = votifier ?: throw IllegalStateException("Votifier instance hasn't been initialized!")
+    }
+
+    override fun registerConfigs() {
+        gunpowder.registry.registerConfig("gunpowder-votifier.yaml", VotifierConfig::class.java, "gunpowder-votifier.yaml")
+    }
+
+    override fun registerCommands() {
+        gunpowder.registry.registerCommand(VotifierCommand::register)
     }
 
     override fun onInitialize() {
