@@ -12,43 +12,45 @@ import java.security.spec.X509EncodedKeySpec
 import javax.xml.bind.DatatypeConverter
 
 class RSAIO {
-    fun save(directory: File, pair: KeyPair) {
-        val privateKey: PrivateKey = pair.private
-        val publicKey: PublicKey = pair.public
+    companion object {
+        fun save(directory: File, pair: KeyPair) {
+            val privateKey: PrivateKey = pair.private
+            val publicKey: PublicKey = pair.public
 
-        val publicSpec = X509EncodedKeySpec(publicKey.encoded)
-        save("${directory}/public.key", publicSpec.encoded)
+            val publicSpec = X509EncodedKeySpec(publicKey.encoded)
+            save("${directory}/public.key", publicSpec.encoded)
 
-        val privateSpec = PKCS8EncodedKeySpec(privateKey.encoded)
-        save("${directory}/public.key", privateSpec.encoded)
-    }
+            val privateSpec = PKCS8EncodedKeySpec(privateKey.encoded)
+            save("${directory}/public.key", privateSpec.encoded)
+        }
 
-    fun load(directory: File): KeyPair {
-        val keyFactory: KeyFactory = KeyFactory.getInstance("RSA")
-        val encodedPublicKey = fileToByteArray(File("${directory}/public.key"))
-        val encodedPrivateKey = fileToByteArray(File("${directory}/private.key"))
+        fun load(directory: File): KeyPair {
+            val keyFactory: KeyFactory = KeyFactory.getInstance("RSA")
+            val encodedPublicKey = fileToByteArray(File("${directory}/public.key"))
+            val encodedPrivateKey = fileToByteArray(File("${directory}/private.key"))
 
-        val publicKeySpec = X509EncodedKeySpec(encodedPublicKey)
-        val publicKey: PublicKey = keyFactory.generatePublic(publicKeySpec)
+            val publicKeySpec = X509EncodedKeySpec(encodedPublicKey)
+            val publicKey: PublicKey = keyFactory.generatePublic(publicKeySpec)
 
-        val privateKeySpec = X509EncodedKeySpec(encodedPrivateKey)
-        val privateKey: PrivateKey = keyFactory.generatePrivate(privateKeySpec)
+            val privateKeySpec = X509EncodedKeySpec(encodedPrivateKey)
+            val privateKey: PrivateKey = keyFactory.generatePrivate(privateKeySpec)
 
-        return KeyPair(publicKey, privateKey)
-    }
+            return KeyPair(publicKey, privateKey)
+        }
 
-    private fun save(file: String, data: ByteArray) {
-        val out = FileOutputStream(file)
-        out.write(DatatypeConverter.printBase64Binary(data).toByteArray())
-        out.close()
-    }
+        private fun save(file: String, data: ByteArray) {
+            val out = FileOutputStream(file)
+            out.write(DatatypeConverter.printBase64Binary(data).toByteArray())
+            out.close()
+        }
 
-    private fun fileToByteArray(keyFile: File): ByteArray {
-        val inputStream = FileInputStream(keyFile)
-        var encodedKey = ByteArray(keyFile.length().toByte().toInt())
-        inputStream.read(encodedKey)
-        encodedKey = DatatypeConverter.parseBase64Binary(encodedKey.toString())
-        inputStream.close()
-        return encodedKey
+        private fun fileToByteArray(keyFile: File): ByteArray {
+            val inputStream = FileInputStream(keyFile)
+            var encodedKey = ByteArray(keyFile.length().toByte().toInt())
+            inputStream.read(encodedKey)
+            encodedKey = DatatypeConverter.parseBase64Binary(encodedKey.toString())
+            inputStream.close()
+            return encodedKey
+        }
     }
 }

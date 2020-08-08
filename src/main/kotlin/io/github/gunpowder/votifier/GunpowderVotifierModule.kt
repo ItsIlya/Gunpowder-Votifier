@@ -26,16 +26,28 @@ package io.github.gunpowder.votifier
 
 import io.github.gunpowder.api.GunpowderMod
 import io.github.gunpowder.api.GunpowderModule
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 
 class GunpowderVotifierModule : GunpowderModule {
     override val name = "votifier"
     override val toggleable = true
+
     companion object {
+        private lateinit var votifier: Votifier
+
         val gunpowder: GunpowderMod
             get() = GunpowderMod.instance
+
+        val instance: Votifier
+            get() = votifier
     }
 
     override fun onInitialize() {
+        votifier = Votifier()
 
+        ServerLifecycleEvents.SERVER_STOPPING.register(ServerLifecycleEvents.ServerStopping {
+            votifier.shutdown()
+        })
     }
+
 }

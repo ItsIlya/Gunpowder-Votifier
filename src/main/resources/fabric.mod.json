@@ -8,7 +8,7 @@
   "environment": "server",
   "entrypoints": {
     "gunpowder:modules": [
-      "io.github.gunpowder.GunpowderTemplateModule"
+      "io.github.gunpowder.GunpowderVotifierModule"
     ]
   },
   "mixins": [
