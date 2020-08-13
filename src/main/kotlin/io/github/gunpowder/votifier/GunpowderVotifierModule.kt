@@ -61,21 +61,27 @@ class GunpowderVotifierModule : GunpowderModule {
         gunpowder.registry.registerCommand(VotifierCommand::register)
     }
 
+    override fun registerEvents() {
+        ServerLifecycleEvents.SERVER_STOPPING.register(ServerLifecycleEvents.ServerStopping {
+            votifier!!.shutdown()
+        })
+    }
+
     override fun onInitialize() {
         if (!directory.exists()) {
             directory.mkdirs()
         }
 
-        votifier = try {
+        votifier = initVotifier()
+    }
+
+    private fun initVotifier(): Votifier? {
+        return try {
             Votifier
         } catch (e: Exception) {
             logger.error("Votifier did not initialize properly!", e)
             null
         }
-
-        ServerLifecycleEvents.SERVER_STOPPING.register(ServerLifecycleEvents.ServerStopping {
-            votifier!!.shutdown()
-        })
     }
 
 }

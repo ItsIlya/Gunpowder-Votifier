@@ -59,7 +59,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:$project.fabric_api"
 
     // Gunpowder
-    implementation "io.github.gunpowder:gunpowder-api:${project.gunpowder}+${project.minecraft}"
+    modCompileOnly "io.github.gunpowder:gunpowder-api:${project.gunpowder}+${project.minecraft}"
 
     // Database
     implementation "org.jetbrains.exposed:exposed-core:$project.exposed"
@@ -154,7 +154,7 @@ if (file('secrets.gradle').exists()) {
     curseforge {
         apiKey = project.cfKey
         project {
-            id = "${project.cdId}"
+            id = "${project.cfId}"
             releaseType = "release"
             changelogType = "markdown"
             changelog = file("CHANGELOG.md").readLines().join("\n").split("---")[0]

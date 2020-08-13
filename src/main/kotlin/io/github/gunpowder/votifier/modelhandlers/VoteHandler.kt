@@ -22,28 +22,17 @@
  * SOFTWARE.
  */
 
-package io.github.gunpowder.votifier.crypto
+package io.github.gunpowder.votifier.modelhandlers
 
-import io.github.gunpowder.votifier.GunpowderVotifierModule
-import java.security.Key
-import java.security.PrivateKey
-import java.security.PublicKey
-import javax.crypto.Cipher
+import io.github.gunpowder.votifier.dataholders.StoredVotes
+import java.util.*
 
-class RSA {
-    companion object {
-        fun encrypt(data: ByteArray, key: PublicKey): ByteArray {
-            return doFinal(data, key, Cipher.ENCRYPT_MODE)
-        }
+interface VoteHandler {
+    fun getVotesTop(): Array<StoredVotes>
 
-        fun decrypt(data: ByteArray, key: PrivateKey): ByteArray {
-            return doFinal(data, key, Cipher.DECRYPT_MODE)
-        }
+    fun getUser(user: UUID): StoredVotes
 
-        private fun doFinal(data: ByteArray, key: Key, mode: Int): ByteArray {
-            val cipher: Cipher = Cipher.getInstance(GunpowderVotifierModule.instance.protocol)
-            cipher.init(mode, key)
-            return cipher.doFinal(data)
-        }
-    }
+    fun modifyUser(user: UUID, callable: (StoredVotes) -> StoredVotes)
+
+    fun updateUser(user: UUID, callable: StoredVotes)
 }
